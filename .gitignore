@@ -1,0 +1,7 @@
+.idea/*
+
+# binary
+bin/*
+
+# Golang dependencies
+vendor/*

@@ -1,0 +1,164 @@
+// Copyright (c) 2018 IoTeX
+// This is an alpha (internal) release and is not suitable for production. This source code is provided 'as is' and no
+// warranties are given as to title or non-infringement, merchantability or fitness for purpose and, to the extent
+// permitted by law, all liability for your use of the code is disclaimed. This source code is governed by Apache
+// License 2.0 that can be found in the LICENSE file.
+
+// To compile the proto, run:
+//      protoc --go_out=plugins=grpc:. *.proto
+syntax = "proto3";
+package pb;
+
+// The wallet service definition
+service walletService {
+    rpc NewWallet (NewWalletRequest) returns (NewWalletResponse) {}
+    rpc Unlock (UnlockRequest) returns (UnlockResponse) {}
+    rpc SignTransfer (SignTransferRequest) returns (SignTransferResponse) {}
+    rpc SignVote (SignVoteRequest) returns (SignVoteResponse) {}
+    rpc SignExecution (SignExecutionRequest) returns (SignExecutionResponse) {}
+    rpc SignCreateDeposit (SignCreateDepositRequest) returns (SignCreateDepositResponse) {}
+    rpc SignSettleDeposit (SignSettleDepositRequest) returns (SignSettleDepositResponse) {}
+    rpc DecodeAddress (DecodeAddressRequest) returns (DecodeAddressResponse) {}
+}
+
+message NewWalletRequest {
+    int64 chainID = 1;
+}
+
+message NewWalletResponse {
+    Address address = 1;
+}
+
+message UnlockRequest {
+    string privateKey = 1;
+    int64 chainID = 2;
+}
+
+message UnlockResponse {
+    Address address = 1;
+}
+
+message SignTransferRequest {
+    Address address = 1;
+    Transfer transfer = 2;
+}
+
+message SignTransferResponse {
+    Transfer transfer = 1;
+}
+
+message SignVoteRequest {
+    Address address = 1;
+    Vote vote = 2;
+}
+
+message SignVoteResponse {
+    Vote vote = 1;
+}
+
+message DecodeAddressRequest {
+    string address = 1;
+    int64 chainID = 2;
+}
+
+message DecodeAddressResponse {
+    string hash = 1;
+    string chainID = 2;
+    bool isTestnet = 3;
+}
+
+message Address {
+    string publicKey = 1;
+    string privateKey = 2;
+    string rawAddress = 3;
+}
+
+message SignExecutionRequest {
+    Address address = 1;
+    Execution execution = 2;
+}
+
+message SignExecutionResponse {
+    Execution execution = 1;
+}
+
+message SignCreateDepositRequest {
+    Address address = 1;
+    CreateDeposit createDeposit = 2;
+}
+
+message SignCreateDepositResponse {
+    CreateDeposit createDeposit = 1;
+}
+
+message SignSettleDepositRequest {
+    Address address = 1;
+    SettleDeposit settleDeposit = 2;
+}
+
+message SignSettleDepositResponse {
+    SettleDeposit settleDeposit = 1;
+}
+
+message Transfer {
+    int64 nonce = 1;
+    string signature = 2;
+    string amount  = 3;
+    string sender = 4;
+    string recipient = 5;
+    string payload  = 6;
+    int64 gasLimit = 7;
+    string gasPrice = 8;
+    int64 version = 9;
+    bool isCoinbase = 10;
+    string senderPubKey = 11;
+}
+
+message Vote {
+    int64 nonce = 1;
+    string signature = 2;
+    string voterAddress = 3;  // the address of this node
+    string voteeAddress = 4;  // the address this node is voting for
+    int64 gasLimit = 5;
+    string gasPrice = 6;
+    int64 version = 7;
+    string selfPubKey = 8;
+}
+
+message Execution {
+    int64 nonce = 1;
+    string signature = 2;
+    string amount = 3;
+    string executor = 4;
+    string contract = 5;
+    int64 gasLimit = 6;
+    string gasPrice = 7;
+    string data = 8;
+    int64 version = 9;
+    string executorPubKey = 10;
+}
+
+message CreateDeposit {
+    int64 nonce = 1;
+    string signature = 2;
+    string amount = 3;
+    string sender = 4;
+    string recipient = 5;
+    int64 gasLimit = 6;
+    string gasPrice = 7;
+    int64 version = 8;
+    string senderPubKey = 9;
+}
+
+message SettleDeposit {
+    int64 nonce = 1;
+    string signature = 2;
+    string amount = 3;
+    int64  index = 4;
+    string sender = 5;
+    string recipient = 6;
+    int64 gasLimit = 7;
+    string gasPrice = 8;
+    int64 version = 9;
+    string senderPubKey = 10;
+}
